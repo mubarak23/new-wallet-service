@@ -1,0 +1,383 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"IAccessTokenData": {
+				"properties": {
+					"token": {
+						"type": "string"
+					},
+					"user": {},
+					"wallet": {},
+					"refreshToken": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"token",
+					"refreshToken"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DetailedError": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"standardizedErrorCode": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message",
+					"standardizedErrorCode"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IServerResponse_IAccessTokenData_": {
+				"properties": {
+					"status": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/IAccessTokenData"
+					},
+					"error": {
+						"type": "string"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/DetailedError"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ISignupDto": {
+				"properties": {
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"emailAddress": {
+						"type": "string"
+					},
+					"phoneNumber": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"firstName",
+					"lastName",
+					"emailAddress",
+					"phoneNumber",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ILoginDto": {
+				"properties": {
+					"emailAddress": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"emailAddress",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUrlShortler": {
+				"properties": {
+					"shortUrl": {
+						"type": "string"
+					},
+					"longUrl": {
+						"type": "string"
+					},
+					"uniqueCode": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"shortUrl",
+					"longUrl",
+					"uniqueCode"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IServerResponse_IUrlShortler_": {
+				"properties": {
+					"status": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/IUrlShortler"
+					},
+					"error": {
+						"type": "string"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/DetailedError"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IServerResponse_void_": {
+				"properties": {
+					"status": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {},
+					"error": {
+						"type": "string"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/DetailedError"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUpdateUrlShortLer": {
+				"properties": {
+					"longUrl": {
+						"type": "string"
+					},
+					"uniqueCode": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"longUrl",
+					"uniqueCode"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "apiKey",
+				"name": "x-access-token",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": "shortURL",
+		"version": "1.0.0",
+		"description": "shortURL Service Backend",
+		"contact": {
+			"name": "Mubarak Aminu"
+		}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/api/auth/users/signup": {
+			"post": {
+				"operationId": "AgentSignup",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse_IAccessTokenData_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth Service"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ISignupDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/auth/users/signin": {
+			"post": {
+				"operationId": "AgentSignin",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse_IAccessTokenData_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth Service"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILoginDto"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/url/{uniqueCode}": {
+			"get": {
+				"operationId": "HandleFetchUrlDetails",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse_IUrlShortler_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"URL"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "uniqueCode",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "HandleDeleteUrl",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse_void_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"URL"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "uniqueCode",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/url/update": {
+			"put": {
+				"operationId": "HandleUpdateUrlShortler",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse_void_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"URL"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUpdateUrlShortLer"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
