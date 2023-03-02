@@ -32,6 +32,7 @@
     "nanoid": "^4.0.0",
     "node-cron": "3.0.0",
     "normalize-email": "1.1.1",
+    "@supercharge/request-ip": "1.1.2",
     "pg": "8.2.2",
     "react-redux": "^8.0.5",
     "react-redux-toastr": "^7.6.10",
