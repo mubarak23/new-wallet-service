@@ -1,8 +1,7 @@
 import { Request } from "express";
 import * as jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
-// import { User } from "./entity/User";
-// import { User } from "./entity/User";
+import { User } from "./entity/User";
 import { ErrorMessages } from "./enums/ErrorMessages";
 
 
@@ -21,8 +20,8 @@ export function expressAuthentication(request: Request, securityName: string, sc
         (async () => {
           const { uuid } = decoded;
 
-           // const userRepo = getRepository(User);
-          const currentUser = {id: "34456"} // await userRepo.findOne({ uuid });
+          const userRepo = getRepository(User);
+          const currentUser = await userRepo.findOne({ uuid });
 
           if (!currentUser) {
             return reject(ErrorMessages.USER_NON_EXISTENCE);
