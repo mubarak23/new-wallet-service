@@ -30,6 +30,55 @@ export enum WalletColumns {
 }
 
 
+export enum PaystackWebhooksColumns {
+  UUID = 'webhook_uuid',
+  TRANSACTION_UUID = 'transaction_uuid',
+  PAYSTACK_PAYLOAD = 'paystack_payload',
+  IS_PROCESSED = 'is_processed'
+}
+
+export enum PaystackDedicatedNubanColumns {
+  UUID = "uuid",
+  USER_ID = "user_id",
+  DEDICATED_NUBAN_PAYLOAD = "dedicated_nuban_payload",
+
+  BANK_ID = "",
+  BANK_NAME = "",
+  BANK_ACCOUNT_NUMBER = "",
+  BANK_ACCOUNT_NAME = "",
+
+  PAYSTACK_CUSTOMER_ID = "",
+  PAYSTACK_INTEGRATION = "",
+}
+
+export enum PaystackTransferRecipientColumns {
+  UUID = "uuid",
+  ACCOUNT_NUMBER = "account_number",
+  BANK_CODE = "bank_code",
+  RECIPIENT_CODE = "recipient_code",
+  CURRENCY = "currency",
+}
+
+export enum FinancialTransactionColumns {
+  UUID = "transaction_uuid",
+  USER_ID = "user_id",
+  WALLET_ID = "wallet_id",
+
+  REFERENCE = "reference",
+  REFERENCE_TYPE = "reference_type",
+  TRANSACTION_TYPE = "transaction_type",
+  AMOUNT_MINOR = "amount_minor",
+  PAID_STATUS = "paid_status",
+
+  WALLET_BALANCE_MINOR_BEFORE = "wallet_balance_minor_before",
+  WALLET_BALANCE_MINOR_AFTER = "wallet_balance_minor_after",
+
+  PAID_AT = "paid_at",
+  METADATA = "metadata",
+  CURRENCY = "currency",
+  DESCRIPTION = "description",
+}
+
 
 
 export const TableColumns: any = {

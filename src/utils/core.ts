@@ -89,3 +89,23 @@ export const handleAxiosRequestError = (error: AxiosError) => {
 export const jsonbArrayValue = (array: any[]) => {
   return `'${JSON.stringify(array)}'`
 }
+
+
+export const getPaystackTransactionFeeMajor = (amountMajor: number) => {
+  let possibleTransactionFee = (0.015 * amountMajor)
+  
+  if(amountMajor >= 2500) {
+    possibleTransactionFee += 100
+  }
+
+  return possibleTransactionFee > 2000 ? 2000 : possibleTransactionFee
+}
+
+export const getPaystackTransferFeeMajor = (amountMajor: number) => {  
+  if(amountMajor <= 5000) {
+    return 10
+  } if(amountMajor >= 5001 && amountMajor <= 50000) {
+    return 25
+  } 
+  return 50
+}

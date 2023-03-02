@@ -5,7 +5,9 @@ import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, H
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AuthController } from './controllers/AuthController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UrlShortLerController } from './controllers/UrlShortLerController';
+import { PaymentsController } from './controllers/PaymentController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { WalletController } from './controllers/WalletController';
 import { expressAuthentication } from './authentication';
 // @ts-ignore - no great way to install types from subpackage
 const promiseAny = require('promise.any');
@@ -67,24 +69,38 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "IUrlShortler": {
+    "PaymentInitializeResponse": {
         "dataType": "refObject",
         "properties": {
-            "shortUrl": {"dataType":"string","required":true},
-            "longUrl": {"dataType":"string","required":true},
-            "uniqueCode": {"dataType":"string","required":true},
+            "paymentProviderRedirectUrl": {"dataType":"string","required":true},
+            "paymentReference": {"dataType":"string","required":true},
+            "accessCode": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "IServerResponse_IUrlShortler_": {
+    "IServerResponse_PaymentInitializeResponse_": {
         "dataType": "refObject",
         "properties": {
             "status": {"dataType":"boolean","required":true},
             "message": {"dataType":"string"},
-            "data": {"ref":"IUrlShortler"},
+            "data": {"ref":"PaymentInitializeResponse"},
             "error": {"dataType":"string"},
             "errors": {"dataType":"array","array":{"dataType":"refObject","ref":"DetailedError"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PaymentInitializeVariant": {
+        "dataType": "refEnum",
+        "enums": ["FUND_MAIN_WALLET"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PaymentInitialize": {
+        "dataType": "refObject",
+        "properties": {
+            "paymentVariant": {"ref":"PaymentInitializeVariant","required":true},
+            "amountMajor": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"enum","enums":[null]}]},
         },
         "additionalProperties": false,
     },
@@ -101,13 +117,105 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "IUpdateUrlShortLer": {
+    "Pick_PaystackDedicatedNuban.Exclude_keyofPaystackDedicatedNuban.id__": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"uuid":{"dataType":"string","required":true},"userId":{"dataType":"double","required":true},"dedicatedNubanPayload":{"dataType":"any"},"bankId":{"dataType":"string","required":true},"bankName":{"dataType":"string","required":true},"bankAccountNumber":{"dataType":"string","required":true},"bankAccountName":{"dataType":"string","required":true},"paystackCustomerId":{"dataType":"string","required":true},"paystackIntegration":{"dataType":"string","required":true},"createdAt":{"dataType":"datetime","required":true},"updatedAt":{"dataType":"datetime","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Omit_PaystackDedicatedNuban.id_": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_PaystackDedicatedNuban.Exclude_keyofPaystackDedicatedNuban.id__","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IServerResponse_Omit_PaystackDedicatedNuban.id__": {
         "dataType": "refObject",
         "properties": {
-            "longUrl": {"dataType":"string","required":true},
-            "uniqueCode": {"dataType":"string","required":true},
+            "status": {"dataType":"boolean","required":true},
+            "message": {"dataType":"string"},
+            "data": {"ref":"Omit_PaystackDedicatedNuban.id_"},
+            "error": {"dataType":"string"},
+            "errors": {"dataType":"array","array":{"dataType":"refObject","ref":"DetailedError"}},
         },
         "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IServerResponse__currency-string.currencySymbol-string.amountMajor-number__": {
+        "dataType": "refObject",
+        "properties": {
+            "status": {"dataType":"boolean","required":true},
+            "message": {"dataType":"string"},
+            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"amountMajor":{"dataType":"double","required":true},"currencySymbol":{"dataType":"string","required":true},"currency":{"dataType":"string","required":true}}},
+            "error": {"dataType":"string"},
+            "errors": {"dataType":"array","array":{"dataType":"refObject","ref":"DetailedError"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PaymentTransactionTypes": {
+        "dataType": "refEnum",
+        "enums": ["external_to_fund_wallet","escrow_to_refund_buyer","wallet_funds_withdrawal"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "FinancialTransactionMetadata": {
+        "dataType": "refObject",
+        "properties": {
+            "orderUuid": {"dataType":"string"},
+            "temporaryOrderUuid": {"dataType":"string"},
+            "productLeaseId": {"dataType":"double"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "TransactionFlowType": {
+        "dataType": "refEnum",
+        "enums": ["in","out"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IFinancialTransactionResponseDto": {
+        "dataType": "refObject",
+        "properties": {
+            "uuid": {"dataType":"string","required":true},
+            "type": {"ref":"PaymentTransactionTypes","required":true},
+            "amountMajor": {"dataType":"double","required":true},
+            "currency": {"dataType":"string","required":true},
+            "currencySymbol": {"dataType":"string","required":true},
+            "walletBalanceMajorBefore": {"dataType":"double","required":true},
+            "walletBalanceMajorAfter": {"dataType":"double","required":true},
+            "metadata": {"ref":"FinancialTransactionMetadata","required":true},
+            "paidStatus": {"dataType":"any","required":true},
+            "description": {"dataType":"string","required":true},
+            "flowType": {"ref":"TransactionFlowType","required":true},
+            "createdAt": {"dataType":"datetime","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IPaginatedList_IFinancialTransactionResponseDto_": {
+        "dataType": "refObject",
+        "properties": {
+            "pageNumber": {"dataType":"double","required":true},
+            "total": {"dataType":"double","required":true},
+            "pageSize": {"dataType":"double","required":true},
+            "dataset": {"dataType":"array","array":{"dataType":"refObject","ref":"IFinancialTransactionResponseDto"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IServerResponse_IPaginatedList_IFinancialTransactionResponseDto__": {
+        "dataType": "refObject",
+        "properties": {
+            "status": {"dataType":"boolean","required":true},
+            "message": {"dataType":"string"},
+            "data": {"ref":"IPaginatedList_IFinancialTransactionResponseDto_"},
+            "error": {"dataType":"string"},
+            "errors": {"dataType":"array","array":{"dataType":"refObject","ref":"DetailedError"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SortOrder": {
+        "dataType": "refEnum",
+        "enums": ["ASC","DESC"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -166,11 +274,13 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/url/:uniqueCode',
+        app.post('/api/payments/paystack/initialize',
+            authenticateMiddleware([{"jwt":[]}]),
 
-            function UrlShortLerController_handleFetchUrlDetails(request: any, response: any, next: any) {
+            function PaymentsController_initializePaystackPayment(request: any, response: any, next: any) {
             const args = {
-                    uniqueCode: {"in":"path","name":"uniqueCode","required":true,"dataType":"string"},
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
+                    reqBody: {"in":"body","name":"reqBody","required":true,"ref":"PaymentInitialize"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -179,21 +289,21 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UrlShortLerController();
+                const controller = new PaymentsController();
 
 
-              const promise = controller.handleFetchUrlDetails.apply(controller, validatedArgs as any);
+              const promise = controller.initializePaystackPayment.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/api/url/update',
+        app.post('/api/payments/paystack/verify/webhook',
 
-            function UrlShortLerController_handleUpdateUrlShortler(request: any, response: any, next: any) {
+            function PaymentsController_verifyPaystackTransaction(request: any, response: any, next: any) {
             const args = {
-                    reqBody: {"in":"body","name":"reqBody","required":true,"ref":"IUpdateUrlShortLer"},
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -202,21 +312,22 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UrlShortLerController();
+                const controller = new PaymentsController();
 
 
-              const promise = controller.handleUpdateUrlShortler.apply(controller, validatedArgs as any);
+              const promise = controller.verifyPaystackTransaction.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/api/url/:uniqueCode',
+        app.get('/api/payments/paystack/dedicated-account',
+            authenticateMiddleware([{"jwt":[]}]),
 
-            function UrlShortLerController_handleDeleteUrl(request: any, response: any, next: any) {
+            function PaymentsController_dedicatedAccount(request: any, response: any, next: any) {
             const args = {
-                    uniqueCode: {"in":"path","name":"uniqueCode","required":true,"dataType":"string"},
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -225,10 +336,60 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UrlShortLerController();
+                const controller = new PaymentsController();
 
 
-              const promise = controller.handleDeleteUrl.apply(controller, validatedArgs as any);
+              const promise = controller.dedicatedAccount.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/wallet/main/balance',
+            authenticateMiddleware([{"jwt":[]}]),
+
+            function WalletController_mainWalletBalance(request: any, response: any, next: any) {
+            const args = {
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new WalletController();
+
+
+              const promise = controller.mainWalletBalance.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/wallet/transactions',
+            authenticateMiddleware([{"jwt":[]}]),
+
+            function WalletController_financialTransactions(request: any, response: any, next: any) {
+            const args = {
+                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
+                    pageNumber: {"in":"query","name":"pageNumber","required":true,"dataType":"any"},
+                    sortOrder: {"in":"query","name":"sortOrder","required":true,"ref":"SortOrder"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new WalletController();
+
+
+              const promise = controller.financialTransactions.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
@@ -238,6 +399,65 @@ export function RegisterRoutes(app: express.Router) {
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
+
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+    function authenticateMiddleware(security: TsoaRoute.Security[] = []) {
+        return async function runAuthenticationMiddleware(request: any, _response: any, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            // keep track of failed auth attempts so we can hand back the most
+            // recent one.  This behavior was previously existing so preserving it
+            // here
+            const failedAttempts: any[] = [];
+            const pushAndRethrow = (error: any) => {
+                failedAttempts.push(error);
+                throw error;
+            };
+
+            const secMethodOrPromises: Promise<any>[] = [];
+            for (const secMethod of security) {
+                if (Object.keys(secMethod).length > 1) {
+                    const secMethodAndPromises: Promise<any>[] = [];
+
+                    for (const name in secMethod) {
+                        secMethodAndPromises.push(
+                            expressAuthentication(request, name, secMethod[name])
+                                .catch(pushAndRethrow)
+                        );
+                    }
+
+                    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+                    secMethodOrPromises.push(Promise.all(secMethodAndPromises)
+                        .then(users => { return users[0]; }));
+                } else {
+                    for (const name in secMethod) {
+                        secMethodOrPromises.push(
+                            expressAuthentication(request, name, secMethod[name])
+                                .catch(pushAndRethrow)
+                        );
+                    }
+                }
+            }
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            try {
+                request['user'] = await promiseAny(secMethodOrPromises);
+                next();
+            }
+            catch(err) {
+                // Show most recent error as response
+                const error = failedAttempts.pop();
+                error.status = error.status || 401;
+                next(error);
+            }
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        }
+    }
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 

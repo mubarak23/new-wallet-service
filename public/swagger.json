@@ -111,27 +111,27 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"IUrlShortler": {
+			"PaymentInitializeResponse": {
 				"properties": {
-					"shortUrl": {
+					"paymentProviderRedirectUrl": {
 						"type": "string"
 					},
-					"longUrl": {
+					"paymentReference": {
 						"type": "string"
 					},
-					"uniqueCode": {
+					"accessCode": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"shortUrl",
-					"longUrl",
-					"uniqueCode"
+					"paymentProviderRedirectUrl",
+					"paymentReference",
+					"accessCode"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
-			"IServerResponse_IUrlShortler_": {
+			"IServerResponse_PaymentInitializeResponse_": {
 				"properties": {
 					"status": {
 						"type": "boolean"
@@ -140,7 +140,7 @@
 						"type": "string"
 					},
 					"data": {
-						"$ref": "#/components/schemas/IUrlShortler"
+						"$ref": "#/components/schemas/PaymentInitializeResponse"
 					},
 					"error": {
 						"type": "string"
@@ -154,6 +154,29 @@
 				},
 				"required": [
 					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PaymentInitializeVariant": {
+				"enum": [
+					"FUND_MAIN_WALLET"
+				],
+				"type": "string"
+			},
+			"PaymentInitialize": {
+				"properties": {
+					"paymentVariant": {
+						"$ref": "#/components/schemas/PaymentInitializeVariant"
+					},
+					"amountMajor": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"required": [
+					"paymentVariant"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -183,21 +206,285 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"IUpdateUrlShortLer": {
+			"Pick_PaystackDedicatedNuban.Exclude_keyofPaystackDedicatedNuban.id__": {
 				"properties": {
-					"longUrl": {
+					"uuid": {
 						"type": "string"
 					},
-					"uniqueCode": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"dedicatedNubanPayload": {},
+					"bankId": {
 						"type": "string"
+					},
+					"bankName": {
+						"type": "string"
+					},
+					"bankAccountNumber": {
+						"type": "string"
+					},
+					"bankAccountName": {
+						"type": "string"
+					},
+					"paystackCustomerId": {
+						"type": "string"
+					},
+					"paystackIntegration": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
 					}
 				},
 				"required": [
-					"longUrl",
-					"uniqueCode"
+					"uuid",
+					"userId",
+					"bankId",
+					"bankName",
+					"bankAccountNumber",
+					"bankAccountName",
+					"paystackCustomerId",
+					"paystackIntegration",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_PaystackDedicatedNuban.id_": {
+				"$ref": "#/components/schemas/Pick_PaystackDedicatedNuban.Exclude_keyofPaystackDedicatedNuban.id__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"IServerResponse_Omit_PaystackDedicatedNuban.id__": {
+				"properties": {
+					"status": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/Omit_PaystackDedicatedNuban.id_"
+					},
+					"error": {
+						"type": "string"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/DetailedError"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"status"
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"IServerResponse__currency-string.currencySymbol-string.amountMajor-number__": {
+				"properties": {
+					"status": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"properties": {
+							"amountMajor": {
+								"type": "number",
+								"format": "double"
+							},
+							"currencySymbol": {
+								"type": "string"
+							},
+							"currency": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"amountMajor",
+							"currencySymbol",
+							"currency"
+						],
+						"type": "object"
+					},
+					"error": {
+						"type": "string"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/DetailedError"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PaymentTransactionTypes": {
+				"enum": [
+					"external_to_fund_wallet",
+					"escrow_to_refund_buyer",
+					"wallet_funds_withdrawal"
+				],
+				"type": "string"
+			},
+			"FinancialTransactionMetadata": {
+				"properties": {
+					"orderUuid": {
+						"type": "string"
+					},
+					"temporaryOrderUuid": {
+						"type": "string"
+					},
+					"productLeaseId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TransactionFlowType": {
+				"enum": [
+					"in",
+					"out"
+				],
+				"type": "string"
+			},
+			"IFinancialTransactionResponseDto": {
+				"properties": {
+					"uuid": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/PaymentTransactionTypes"
+					},
+					"amountMajor": {
+						"type": "number",
+						"format": "double"
+					},
+					"currency": {
+						"type": "string"
+					},
+					"currencySymbol": {
+						"type": "string"
+					},
+					"walletBalanceMajorBefore": {
+						"type": "number",
+						"format": "double"
+					},
+					"walletBalanceMajorAfter": {
+						"type": "number",
+						"format": "double"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/FinancialTransactionMetadata"
+					},
+					"paidStatus": {},
+					"description": {
+						"type": "string"
+					},
+					"flowType": {
+						"$ref": "#/components/schemas/TransactionFlowType"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"uuid",
+					"type",
+					"amountMajor",
+					"currency",
+					"currencySymbol",
+					"walletBalanceMajorBefore",
+					"walletBalanceMajorAfter",
+					"metadata",
+					"paidStatus",
+					"description",
+					"flowType",
+					"createdAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IPaginatedList_IFinancialTransactionResponseDto_": {
+				"properties": {
+					"pageNumber": {
+						"type": "number",
+						"format": "double"
+					},
+					"total": {
+						"type": "number",
+						"format": "double"
+					},
+					"pageSize": {
+						"type": "number",
+						"format": "double"
+					},
+					"dataset": {
+						"items": {
+							"$ref": "#/components/schemas/IFinancialTransactionResponseDto"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"pageNumber",
+					"total",
+					"pageSize",
+					"dataset"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IServerResponse_IPaginatedList_IFinancialTransactionResponseDto__": {
+				"properties": {
+					"status": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/IPaginatedList_IFinancialTransactionResponseDto_"
+					},
+					"error": {
+						"type": "string"
+					},
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/DetailedError"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SortOrder": {
+				"enum": [
+					"ASC",
+					"DESC"
+				],
+				"type": "string"
 			}
 		},
 		"securitySchemes": {
@@ -209,9 +496,9 @@
 		}
 	},
 	"info": {
-		"title": "shortURL",
+		"title": "Wallet",
 		"version": "1.0.0",
-		"description": "shortURL Service Backend",
+		"description": "Wallet Service Backend",
 		"contact": {
 			"name": "Mubarak Aminu"
 		}
@@ -282,96 +569,157 @@
 				}
 			}
 		},
-		"/api/url/{uniqueCode}": {
-			"get": {
-				"operationId": "HandleFetchUrlDetails",
+		"/api/payments/paystack/initialize": {
+			"post": {
+				"operationId": "InitializePaystackPayment",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/IServerResponse_IUrlShortler_"
+									"$ref": "#/components/schemas/IServerResponse_PaymentInitializeResponse_"
 								}
 							}
 						}
 					}
 				},
 				"tags": [
-					"URL"
+					"Payments"
 				],
-				"security": [],
-				"parameters": [
+				"security": [
 					{
-						"in": "path",
-						"name": "uniqueCode",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
+						"jwt": []
 					}
-				]
-			},
-			"delete": {
-				"operationId": "HandleDeleteUrl",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/IServerResponse_void_"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"URL"
 				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "uniqueCode",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/api/url/update": {
-			"put": {
-				"operationId": "HandleUpdateUrlShortler",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/IServerResponse_void_"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"URL"
-				],
-				"security": [],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IUpdateUrlShortLer"
+								"$ref": "#/components/schemas/PaymentInitialize"
 							}
 						}
 					}
 				}
+			}
+		},
+		"/api/payments/paystack/verify/webhook": {
+			"post": {
+				"operationId": "VerifyPaystackTransaction",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse_void_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Payments"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/payments/paystack/dedicated-account": {
+			"get": {
+				"operationId": "DedicatedAccount",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse_Omit_PaystackDedicatedNuban.id__"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Payments"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/wallet/main/balance": {
+			"get": {
+				"operationId": "MainWalletBalance",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse__currency-string.currencySymbol-string.amountMajor-number__"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Wallet"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/api/wallet/transactions": {
+			"get": {
+				"operationId": "FinancialTransactions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IServerResponse_IPaginatedList_IFinancialTransactionResponseDto__"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Wallet"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "pageNumber",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sortOrder",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/SortOrder"
+						}
+					}
+				]
 			}
 		}
 	},
