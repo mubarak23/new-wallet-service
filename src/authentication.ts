@@ -8,7 +8,6 @@ import { ErrorMessages } from "./enums/ErrorMessages";
 export function expressAuthentication(request: Request, securityName: string, scopes?: string[]): Promise<any> {
   const token = request.headers["x-access-token"] as string;
   const jwtSecret = (process.env.JWT_SECRET as string) || 'rth5766d'
-  console.log(token)
   return new Promise((resolve, reject) => {
     if (!token) {
       reject(new Error("Swagger Error! No token provided"));
