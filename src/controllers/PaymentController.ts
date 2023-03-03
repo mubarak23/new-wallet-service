@@ -29,13 +29,14 @@ import { Wallet } from "../entity/Wallet";
 import * as WalletService from "../services/walletService"
 import { PaymentVariant } from "../enums/PaymentVarient";
 import { PaystackPayingUser } from "../interfaces/PaystackPayingUser"
-
-import { In } from "typeorm";
-
-
-import * as Utils from '../utils/core'
-
+import path from 'path'
 import { getRepository } from "typeorm";
+
+const envConfig = require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+for (const k in envConfig) {
+  process.env[k] = envConfig[k]
+}
+
 
 @Route("api/payments")
 @Tags('Payments')
@@ -95,7 +96,8 @@ export class PaymentsController {
     //--
     const paystackWebhooksRepo = connection.getRepository(PaystackWebhook)
     const paystackWebhook = new PaystackWebhook().initialize('', req.body)
-    await paystackWebhooksRepo.save(paystackWebhook)
+    const savePaystack = await paystackWebhooksRepo.save(paystackWebhook)
+    console.log(savePaystack)
     //--
     const hash = crypto.createHmac('sha512', paystackApiSecretKey).update(JSON.stringify(req.body)).digest('hex')
     if (hash !== req.headers['x-paystack-signature']) {
@@ -147,7 +149,6 @@ export class PaymentsController {
       }
       const amountMinor = req.body.data.amount
       const userId = paystackDedicatedNuban.userId
-  
       const sourceWallet = await WalletService.getCustomerWallet(userId)
       const walletBalanceMinorBefore = sourceWallet.walletBalanceMinor
       const metadata: FinancialTransactionMetadata = {

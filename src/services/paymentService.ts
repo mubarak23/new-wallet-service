@@ -37,8 +37,7 @@ const paymentTransactionUpdate: any = {
   paidStatus: PaymentTransactionStatus.PAID,
   paidAt: Utils.utcNow()
 }
-await financialTransactionRepo.update(transaction.id, paymentTransactionUpdate)
-
+const saveFinancial = await financialTransactionRepo.update(transaction.id, paymentTransactionUpdate)
 await walletRepo.createQueryBuilder()
   .update(Wallet)
   .set({

@@ -11,6 +11,12 @@ import { PaystackDedicatedNuban } from "../entity/PaystackDedicatedNuban";
 import { PaymentInitializeResponse } from "../dto/PaymentInitializeResponse";
 import * as Utils from "../utils/core"
 import { PaystackPayingUser } from "../interfaces/PaystackPayingUser";
+import path from 'path'
+
+const envConfig = require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+for (const k in envConfig) {
+  process.env[k] = envConfig[k]
+}
 
 
 export const getBanksList = async (): Promise<IPaystackBank[]> => {
@@ -153,7 +159,7 @@ export const saveTransferReceipt = async (bankCode: string, accountNumber: strin
 
 export const createDedicatedNuban = async (userRecord: User): Promise<PaystackDedicatedNuban> => {
   const connection = await getFreshConnection()
-
+  console.log(userRecord)
   const paystackDedicatedNubanRepo = connection.getRepository(PaystackDedicatedNuban)
   let paystackDedicatedNuban = await paystackDedicatedNubanRepo.findOne({
     userId: userRecord.id
@@ -162,9 +168,11 @@ export const createDedicatedNuban = async (userRecord: User): Promise<PaystackDe
     return paystackDedicatedNuban
   }
   //--
+  const key = process.env.PAYSTACK_SECRET_KEY 
+  
   const createCustomerBaseURL = 'https://api.paystack.co/customer'
   const headers = {
-    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+    Authorization: `Bearer ${key}`,
     'content-type': 'application/json',
     'cache-control': 'no-cache'
   }
@@ -174,11 +182,12 @@ export const createDedicatedNuban = async (userRecord: User): Promise<PaystackDe
     email: userRecord.emailAddress,
     phone: userRecord.phoneNumber,
   }
-  try {
+   try {
     const createCustomerResponse: AxiosResponse<any> = await axios.post(createCustomerBaseURL, createCustomerPostPayload, {
       headers
     })
 
+   
     if (!createCustomerResponse.data) {
       throw new ServerError('An error occurred with our payment provider. Please try again at a later time.')
     }
@@ -198,7 +207,7 @@ export const createDedicatedNuban = async (userRecord: User): Promise<PaystackDe
     const createDedicatedNubanBaseURL = 'https://api.paystack.co/dedicated_account'
     const createDedicatedNubanPostPayload = {
       customer: customerId,
-      preferred_bank: process.env.NODE_ENV === 'production' ? "wema-bank" : "test-bank", // This is intentional.
+      preferred_bank:  process.env.NODE_ENV === 'production' ? "wema-bank" : "test-bank", // This is intentional.
     }
     const createDedicatedNubanResponse: AxiosResponse<any> = await axios.post(createDedicatedNubanBaseURL, createDedicatedNubanPostPayload, {
       headers
@@ -213,7 +222,6 @@ export const createDedicatedNuban = async (userRecord: User): Promise<PaystackDe
     paystackDedicatedNuban = new PaystackDedicatedNuban().initialize(userRecord.id,
       bank.id, bank.name, account_number, account_name, customerId, integration, dedicatedNubanActualPayload)
     const savedDedicatedNuban = await paystackDedicatedNubanRepo.save(paystackDedicatedNuban)
-
     return savedDedicatedNuban
   } catch(e) {
     logger.error('Error funding wallet: ', e.message)

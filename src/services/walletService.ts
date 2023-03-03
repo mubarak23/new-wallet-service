@@ -11,24 +11,9 @@ import { CountryToCurrency } from "../enums/Currency";
 export const getCustomerWallet = async (userId: number): Promise<Wallet> => {
   const connection = await getFreshConnection();
   const walletRepo = connection.getRepository(Wallet);
-
   let sourceWallet = await walletRepo.findOne({
-    userId,
-    type: WalletType.PLATFORM,
+    userId
   });
-
-  if (!sourceWallet) {
-    const userRepo = connection.getRepository(User);
-    const user = await userRepo.findOne({ id: userId });
-  
-    const accountWallet = new Wallet().initialize(
-      userId,
-      0.00,
-      WalletType.USER,
-      CountryToCurrency.NIGERIA,
-    );
-    sourceWallet = await walletRepo.save(accountWallet);
-  }
 
   return sourceWallet;
 };
@@ -40,7 +25,7 @@ export const createWallet = async (userId: number) => {
   const connection = await getFreshConnection()
   const walletRepo = connection.getRepository(Wallet)
   const newWallet = new Wallet().initialize(
-    userId, 0.00, WalletType.USER, CountryToCurrency.NIGERIA
+    userId, 0.00, CountryToCurrency.NIGERIA, WalletType.USER
 )
 const saveWallet = await walletRepo.save(newWallet)
 return saveWallet
