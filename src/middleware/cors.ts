@@ -7,6 +7,8 @@ const runCorsMiddleware = (app: express.Application) => {
     origin: [
       'http://localhost:42965',
       "http://localhost:4200",
+      "http://localhost:3000",
+      "https://virtualwallet.vercel.app",
       // 'http://192.168.88.203'
     ],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
