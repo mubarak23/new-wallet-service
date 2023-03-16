@@ -23,6 +23,10 @@ export class User extends DefualtEntity {
   @Column({ name: UserColumns.PHONE_NUMBER, nullable: false})
   phoneNumber: string;
 
+  @Column({ name: UserColumns.SUPER_USER, nullable: true})
+  superUser: number;
+
+
   @Column({ name: UserColumns.PASSWORD_HASH, nullable: false})
   passwordHash: string;
 

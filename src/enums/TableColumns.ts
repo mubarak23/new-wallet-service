@@ -16,6 +16,7 @@ export enum UserColumns {
   EMAIL_ADDRESS = "email_address",
   PHONE_NUMBER = "phone_number",
   PASSWORD_HASH = "password_hash",
+  SUPER_USER = "super_user",
   ROLE = 'role',
   IS_SOFT_DELETED = "is_soft_delete"
 }
